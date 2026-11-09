@@ -9,6 +9,11 @@
 | Windows 桌面端 | 0.7.0 | Windows 10 / 11 x64，免安装单文件，内含 .NET 运行时 |
 | Android 客户端 | 1.0.0（versionCode 16） | Android 8.0+（minSdk 26 / targetSdk 35） |
 
+[![Build Windows x64](https://github.com/yanshen240-boop/ethertransfer/actions/workflows/windows-x64-build.yml/badge.svg)](https://github.com/yanshen240-boop/ethertransfer/actions/workflows/windows-x64-build.yml)
+[![Build Linux x64](https://github.com/yanshen240-boop/ethertransfer/actions/workflows/linux-x64-build.yml/badge.svg)](https://github.com/yanshen240-boop/ethertransfer/actions/workflows/linux-x64-build.yml)
+[![Releases](https://img.shields.io/github/v/release/yanshen240-boop/ethertransfer?style=flat-square)](https://github.com/yanshen240-boop/ethertransfer/releases)
+[![官网](https://img.shields.io/badge/website-yanshen240--boop.github.io-blue?style=flat-square)](https://yanshen240-boop.github.io/ethertransfer/)
+
 ---
 
 ## 一、直接下载运行
@@ -141,7 +146,24 @@ ETHERTRANSFER_PEER_IP=192.168.1.20 ETHERTRANSFER_PEER_PORT=39000 \
 
 ---
 
-## 五、已知限制
+## 五、自动化构建（GitHub Actions）
+
+每次推送到 `main` 会自动跑 6 个工作流，产物在 Actions 页面可直接下载，不需要本地环境：
+
+| 工作流 | 产物 | 大小 |
+| :--- | :--- | :--- |
+| Build Windows x64 | `EtherTransfer_Setup_x64.exe`（Inno Setup 安装包） | 约 38 MB |
+| Build Windows x86 | `EtherTransfer_Setup_x86.exe` | 约 35 MB |
+| Build Windows x64 Portable | 免安装便携版 | 约 57 MB |
+| Build Windows x86 Portable | 免安装便携版 | 约 52 MB |
+| Build Linux x64 | Linux x64 发布包 | 约 52 MB |
+| Deploy Website | 把 `website/` 发布到 [GitHub Pages](https://yanshen240-boop.github.io/ethertransfer/) | — |
+
+> 安装包的简体中文界面依赖 `installer/ChineseSimplified.isl`（取自 jrsoftware/issrc 的社区翻译）。Inno Setup 官方安装包**不带**这个文件，所以它随仓库一起管理，构建时不联网下载。
+
+---
+
+## 六、已知限制
 
 - 传输时安卓端需保持应用在前台或已开启"后台常驻"；本版**没有断点续传**，中断需重传。
 - 路由器开启 AP 隔离时，TCP 直连可能被拦，此时依赖 UDP `39000` 兜底通道（速度低于 TCP）。
@@ -150,6 +172,6 @@ ETHERTRANSFER_PEER_IP=192.168.1.20 ETHERTRANSFER_PEER_PORT=39000 \
 
 ---
 
-## 六、许可证
+## 七、许可证
 
 [MIT](LICENSE)。上游原作者：[Divy Viradiya](https://github.com/divyviradiya2)，本项目在其汉化版基础上完成中文本地化、双链路选路、设备互通巡检与安卓端实现。
