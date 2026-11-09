@@ -1,8 +1,8 @@
 [Setup]
 ; 应用信息
 AppName=EtherTransfer 以太传输
-AppVersion=0.3.0
-AppVerName=EtherTransfer 以太传输 0.3.0
+AppVersion=0.7.0
+AppVerName=EtherTransfer 以太传输 0.7.0
 AppPublisher=DS Labs
 UninstallDisplayIcon={app}\EtherTransfer.exe
 
@@ -29,7 +29,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=admin
 
 [Languages]
-Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+Name: "chinesesimplified"; MessagesFile: "installer\ChineseSimplified.isl"
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
