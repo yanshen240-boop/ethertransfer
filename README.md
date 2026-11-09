@@ -13,13 +13,14 @@
 
 ## 一、直接下载运行
 
-安装包已随仓库提供，克隆后在 `releases/` 目录里：
+**推荐从 [Releases](https://github.com/yanshen240-boop/ethertransfer/releases/latest) 直接下载**，不用克隆 60MB 的仓库：
 
-```
-releases/
-├── windows-x64/EtherTransfer-0.7.0-win-x64.exe   # 双击即用，无需安装
-└── android/EtherTransfer-1.0.0-android.apk       # 手机安装（需允许"未知来源"）
-```
+| 文件 | 直链 |
+| :--- | :--- |
+| Windows 单文件版（62.6 MB） | [EtherTransfer-0.7.0-win-x64.exe](https://github.com/yanshen240-boop/ethertransfer/releases/download/v0.7.0/EtherTransfer-0.7.0-win-x64.exe) |
+| Android 安装包（145 KB） | [EtherTransfer-1.0.0-android.apk](https://github.com/yanshen240-boop/ethertransfer/releases/download/v0.7.0/EtherTransfer-1.0.0-android.apk) |
+
+安装包同时也存放在仓库的 `releases/` 目录里，与源码一起管理。
 
 **Windows 首次运行**会弹出防火墙提示，请勾选"专用网络"并允许，否则对端发现不到本机。
 
