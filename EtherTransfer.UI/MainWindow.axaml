@@ -1,0 +1,569 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:EtherTransfer.UI"
+        xmlns:core="clr-namespace:EtherTransfer.Core.Models;assembly=EtherTransfer.Core"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="890"
+        Width="650" Height="890" MinWidth="520" MinHeight="640"
+        x:Class="EtherTransfer.UI.MainWindow"
+        x:DataType="ui:MainWindow"
+        Title="EtherTransfer 以太传输"
+        Icon="avares://EtherTransfer/Assets/logo.ico"
+        Background="{DynamicResource AppBackground}"
+        Foreground="{DynamicResource AppForeground}"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <Style Selector="PathIcon.os-icon">
+            <Setter Property="Data" Value="{StaticResource DeviceGenericIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=Windows]">
+            <Setter Property="Data" Value="{StaticResource WindowsIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=Linux]">
+            <Setter Property="Data" Value="{StaticResource LinuxIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=macOS]">
+            <Setter Property="Data" Value="{StaticResource AppleIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=Apple]">
+            <Setter Property="Data" Value="{StaticResource AppleIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=OSX]">
+            <Setter Property="Data" Value="{StaticResource AppleIcon}"/>
+        </Style>
+        <Style Selector="PathIcon.os-icon[Tag=Android]">
+            <Setter Property="Data" Value="{StaticResource PhoneIcon}"/>
+        </Style>
+
+        <!-- 胶囊徽章：有线 / Wi-Fi / 离线，颜色只来自设计规范 -->
+        <Style Selector="Border.pill">
+            <Setter Property="CornerRadius" Value="999"/>
+            <Setter Property="Padding" Value="7,1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Border.pill > TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Border.wire">
+            <Setter Property="Background" Value="{DynamicResource WireBadgeBackground}"/>
+        </Style>
+        <Style Selector="Border.wire > TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource WireBadgeForeground}"/>
+        </Style>
+        <Style Selector="Border.wifi">
+            <Setter Property="Background" Value="{DynamicResource WifiBadgeBackground}"/>
+        </Style>
+        <Style Selector="Border.wifi > TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource WifiBadgeForeground}"/>
+        </Style>
+        <Style Selector="Border.pillOff">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundHover}"/>
+        </Style>
+        <Style Selector="Border.pillOff > TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource AppForegroundSecondary}"/>
+        </Style>
+
+        <!-- 无边框小图标按钮 -->
+        <Style Selector="Button.iconBtn">
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.iconBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundHover}"/>
+        </Style>
+        <Style Selector="Button.iconBtnSmall">
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.iconBtnSmall:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundHover}"/>
+        </Style>
+
+        <!-- 会话头的小动作按钮 -->
+        <Style Selector="Button.miniAction">
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AppBorder}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AppForegroundSecondary}"/>
+        </Style>
+
+        <!-- 设备列表行 -->
+        <Style Selector="ListBox#DevicesList ListBoxItem">
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+        </Style>
+        <Style Selector="ListBox#DevicesList ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+        <Style Selector="ListBox#DevicesList ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource OutBubbleBackground}"/>
+        </Style>
+        <Style Selector="ListBox#DevicesList ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundHover}"/>
+        </Style>
+        <Style Selector="ListBox#DevicesList ListBoxItem:selected Border.devCard">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+        </Style>
+
+        <!-- 消息行：气泡与卡片（消息列表为 ItemsControl，无行选中态，避免拖选文本时闪现行高亮） -->
+
+        <Style Selector="Border.bubble">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="MaxWidth" Value="360"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style Selector="Border.bubble.out">
+            <Setter Property="Background" Value="{DynamicResource OutBubbleBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource OutBubbleBorder}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <Style Selector="Border.fcard">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="9,8"/>
+            <Setter Property="Width" Value="228"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.fcard.out">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style Selector="Border.fcard.fail">
+            <Setter Property="Background" Value="{DynamicResource DangerBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource DangerColor}"/>
+        </Style>
+        <Style Selector="TextBlock.fail">
+            <Setter Property="Foreground" Value="{DynamicResource DangerColor}"/>
+        </Style>
+
+        <!-- 悬停工具条：默认透明，悬停该行时浮现；拖选文本期间（dragging）强制隐藏，避免闪烁 -->
+        <Style Selector="StackPanel.msgTools">
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style Selector="StackPanel.msgTools.out">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style Selector="Border.msgRow:pointerover StackPanel.msgTools">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+        <!-- 拖选文本期间（ThreadList 打 msgdragging 标记）压制所有行的悬停工具条，防止闪烁。
+             必须声明在 pointerover 规则之后，两个样式同时命中时后者生效。 -->
+        <Style Selector="ItemsControl#ThreadList.msgdragging Border.msgRow:pointerover StackPanel.msgTools">
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+
+        <!-- 多选选中行：浅色高亮 -->
+        <Style Selector="Border.msgRow.sel">
+            <Setter Property="Background" Value="{DynamicResource WifiBadgeBackground}"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+
+        <!-- 附件 chip -->
+        <Style Selector="Border.chip">
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="7,0"/>
+            <Setter Property="Background" Value="{DynamicResource OutBubbleBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource OutBubbleBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="Border.chip.dir">
+            <Setter Property="Background" Value="{DynamicResource WifiBadgeBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource WifiBadgeBackground}"/>
+        </Style>
+        <Style Selector="Button.chipRemove">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- 设备连通性红绿灯：绿 = 探测连通，红 = 探测失败，灰 = 未探测 -->
+        <Style Selector="Ellipse.dot.ok">
+            <Setter Property="Fill" Value="{DynamicResource SuccessColor}"/>
+        </Style>
+        <Style Selector="Ellipse.dot.fail">
+            <Setter Property="Fill" Value="{DynamicResource DangerColor}"/>
+        </Style>
+        <Style Selector="Ellipse.dot.unknown">
+            <Setter Property="Fill" Value="{DynamicResource AppBorder}"/>
+        </Style>
+    </Window.Styles>
+
+    <LayoutTransformControl x:Name="RootScaler">
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- 顶栏 -->
+        <Border Grid.Row="0" Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,0,0,1" Padding="14,0" Height="44">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                <Border Grid.Column="0" Width="17" Height="17" CornerRadius="5" Background="{DynamicResource AccentColor}" VerticalAlignment="Center">
+                    <PathIcon Data="{StaticResource SendIcon}" Width="10" Height="10" Foreground="{DynamicResource AccentForeground}"/>
+                </Border>
+                <TextBlock Grid.Column="1" Text="以太传输" FontSize="13" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding OnlineCountText}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                <Button Grid.Column="3" Classes="iconBtn" Click="ShowDebugLog_Click" ToolTip.Tip="调试日志">
+                    <PathIcon Data="{StaticResource TerminalIcon}" Width="15" Height="15" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- 两栏：设备 + 会话 -->
+        <Grid Grid.Row="1" ColumnDefinitions="224,*">
+
+            <!-- 设备列 -->
+            <Border Grid.Column="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,0,1,0">
+                <Grid RowDefinitions="Auto,*,Auto,Auto">
+
+                    <Border Grid.Row="0" Height="38" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,0,0,1" Padding="12,0">
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                            <TextBlock Text="已发现的设备" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding DevicesCountText}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            <Button Grid.Column="3" Classes="iconBtnSmall" Click="RefreshScan_Click"
+                                    ToolTip.Tip="立即检测设备互通（逐台测试现在能否传输，并刷新状态灯）"
+                                    IsEnabled="{Binding !IsProbing}" VerticalAlignment="Center">
+                                <PathIcon Data="{StaticResource RefreshIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <Panel Grid.Row="1" IsVisible="{Binding !IsStartupFatalError}">
+                        <!-- 设备列表 -->
+                        <ListBox x:Name="DevicesList" ItemsSource="{Binding DiscoveredDevices}" SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
+                                 Background="Transparent" Padding="7,7,7,0" IsVisible="{Binding IsReady}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="core:DiscoveredDevice">
+                                    <Border Classes="devCard" CornerRadius="8" BorderThickness="1.5" BorderBrush="Transparent" Background="Transparent" Padding="7,6" Margin="0,0,0,2">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <Border Width="28" Height="28" CornerRadius="8" Background="{DynamicResource SurfaceBackgroundHover}">
+                                                <PathIcon Classes="os-icon" Tag="{Binding OS}" Width="16" Height="16" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="7,0,4,0" VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                    <Border Classes="pill wire" IsVisible="{Binding IsWired}"><TextBlock Text="有线"/></Border>
+                                                    <Border Classes="pill wifi" IsVisible="{Binding !IsWired}"><TextBlock Text="Wi-Fi"/></Border>
+                                                </StackPanel>
+                                                <TextBlock Text="{Binding Address}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" Margin="0,1,0,0" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <!-- 连通性红绿灯：绿=可传输，红=连不通，灰=未检测（悬停看原因） -->
+                                            <Ellipse Grid.Column="2" Classes="dot" Width="7" Height="7" VerticalAlignment="Center"
+                                                     ToolTip.Tip="{Binding ConnectivityToolTip}"
+                                                     Classes.ok="{Binding IsConnectivityOk}"
+                                                     Classes.fail="{Binding IsConnectivityFailed}"
+                                                     Classes.unknown="{Binding IsConnectivityUnknown}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!-- 空 / 异常状态 -->
+                        <Panel IsVisible="{Binding !IsReadyAndHasDevicesOrScanning}">
+                            <StackPanel IsVisible="{Binding IsReadyAndEmpty}" VerticalAlignment="Top" Margin="12,12,12,0" Spacing="14">
+                                <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="6" Padding="10" Classes="Skeleton">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Border Grid.Column="0" Width="24" Height="24" Margin="0,0,10,0" CornerRadius="12" Background="{DynamicResource AppBorder}" />
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                                            <Border Height="12" Width="120" CornerRadius="2" Background="{DynamicResource AppBorder}" HorizontalAlignment="Left" />
+                                            <Border Height="9" Width="80" CornerRadius="2" Background="{DynamicResource AppBorder}" HorizontalAlignment="Left" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <TextBlock Text="正在扫描..." FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="正在查找有线及同一 Wi-Fi 中的设备。&#x0a;请在另一台设备上打开 EtherTransfer。" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <StackPanel IsVisible="{Binding HasActiveVpn}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="12,20,12,20" TextBlock.TextAlignment="Center">
+                                <PathIcon Data="{StaticResource AlertIcon}" Width="36" Height="36" Foreground="{DynamicResource WarningColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="VPN 正在阻止设备发现" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource WarningColor}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <TextBlock Text="检测到企业 VPN 正在运行，请断开 VPN 后重试。" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel IsVisible="{Binding IsNoCable}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="12,20" TextBlock.TextAlignment="Center">
+                                <PathIcon Data="{StaticResource AlertIcon}" Width="36" Height="36" Foreground="{DynamicResource AppForegroundSecondary}" Opacity="0.5" HorizontalAlignment="Center"/>
+                                <TextBlock Text="未检测到局域网连接" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="请连接 Wi-Fi，或使用网线连接两台设备。" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel IsVisible="{Binding IsConfiguring}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="12,20" TextBlock.TextAlignment="Center">
+                                <PathIcon Data="{StaticResource SyncIcon}" Width="36" Height="36" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="正在配置网络..." FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="正在分配链路本地地址..." FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel IsVisible="{Binding IsConfigError}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="12,20" TextBlock.TextAlignment="Center">
+                                <PathIcon Data="{StaticResource ErrorIcon}" Width="36" Height="36" Foreground="{DynamicResource DangerColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="配置失败" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource DangerColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding LinkErrorMessage}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                                <Button Content="重试" Classes="Primary" Click="RetryConfig_Click" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Panel>
+
+                        <StackPanel IsVisible="{Binding IsStartupFatalError}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" Margin="12,20" TextBlock.TextAlignment="Center">
+                            <PathIcon Data="{StaticResource ErrorIcon}" Width="36" Height="36" Foreground="{DynamicResource DangerColor}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="启动错误" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource DangerColor}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding StartupFatalErrorMessage}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Panel>
+
+                    <!-- 本机名称 -->
+                    <Border Grid.Row="2" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,1,0,0" Padding="12,0" Height="34">
+                        <Panel VerticalAlignment="Center">
+                            <Grid ColumnDefinitions="Auto,*,Auto" IsVisible="{Binding !IsEditingName}">
+                                <PathIcon Data="{StaticResource DeviceGenericIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding CustomDeviceName}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" Margin="6,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <Button Grid.Column="2" Classes="iconBtnSmall" Click="EditName_Click" ToolTip.Tip="修改本机名称">
+                                    <PathIcon Data="{StaticResource SettingsIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                </Button>
+                            </Grid>
+                            <TextBox x:Name="SelfNameBox" Text="{Binding CustomDeviceName, Mode=TwoWay}" IsVisible="{Binding IsEditingName}"
+                                     Height="24" FontSize="11" Padding="4,2" KeyDown="SelfNameBox_KeyDown" LostFocus="SelfNameBox_LostFocus"/>
+                        </Panel>
+                    </Border>
+
+                    <!-- 清理会话记录 -->
+                    <Button Grid.Row="3" Classes="Danger" HorizontalContentAlignment="Left" Padding="12,6" BorderThickness="0" Click="ClearCache_Click" ToolTip.Tip="删除全部会话记录，不动已接收的文件">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{StaticResource DeleteIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                            <TextBlock Text="清理会话记录" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- 会话列 -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*,Auto" Background="{DynamicResource CardBackground}">
+
+                <!-- 会话头 -->
+                <Border Grid.Row="0" Height="48" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,0,0,1" Padding="12,0">
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                        <Border Width="26" Height="26" CornerRadius="8" Background="{DynamicResource WifiBadgeBackground}" VerticalAlignment="Center">
+                            <PathIcon Classes="os-icon" Tag="{Binding SelectedDeviceOS}" Width="15" Height="15" Foreground="{DynamicResource WifiBadgeForeground}"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding SelectedDeviceNameText}" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding SelectedDeviceMetaText}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Classes="miniAction" Click="ToggleSelection_Click" Content="{Binding SelectionToggleText}" VerticalAlignment="Center" Margin="0,0,4,0" IsEnabled="{Binding HasSelection}"/>
+                        <Button Grid.Column="3" Classes="iconBtnSmall" Click="ToggleSearch_Click" ToolTip.Tip="搜索记录" VerticalAlignment="Center" IsEnabled="{Binding HasSelection}">
+                            <PathIcon Data="{StaticResource SearchIcon}" Width="13" Height="13" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                        </Button>
+                        <Button Grid.Column="4" Classes="iconBtnSmall" Click="MoreMenu_Click" ToolTip.Tip="更多" VerticalAlignment="Center" IsEnabled="{Binding HasSelection}">
+                            <PathIcon Data="{StaticResource MoreIcon}" Width="13" Height="13" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- 搜索行 -->
+                <TextBox Grid.Row="1" x:Name="SearchBox" Text="{Binding SearchQuery, Mode=TwoWay}" IsVisible="{Binding IsSearchOpen}"
+                         Height="30" Margin="12,6,12,0" FontSize="12" PlaceholderText="搜索会话记录…"/>
+
+                <!-- 消息流 -->
+                <Border Grid.Row="2" DragDrop.AllowDrop="True" DragDrop.DragOver="PayloadArea_DragOver" DragDrop.Drop="PayloadArea_Drop">
+                    <Panel>
+                        <ScrollViewer x:Name="ThreadScroll" Background="Transparent" HorizontalScrollBarVisibility="Disabled">
+                            <!-- 内边距放在内容上（Margin 计入滚动范围）；若用 ScrollViewer.Padding，
+                                 滚到底部后最后一条会被裁掉一截 -->
+                            <ItemsControl x:Name="ThreadList" ItemsSource="{Binding ChatEntries}" Margin="12,6,12,10">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <!-- 普通面板：一次布局后范围即最终值，"滚到底部"精确可靠；
+                                             虚拟化面板分批测量会导致滚不到底、最后一条被截断 -->
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            <ItemsControl.DataTemplates>
+                                <DataTemplate DataType="{x:Type ui:DaySeparatorEntry}">
+                                    <TextBlock Text="{Binding Text}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}" Opacity="0.7"
+                                               HorizontalAlignment="Center" Margin="0,9,0,6"/>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type ui:ChatMessageEntry}">
+                                    <Border Classes="msgRow" Classes.sel="{Binding IsSelected}" Background="Transparent" Padding="4,3">
+                                        <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                                            <!-- 多选勾选圈：仅选择模式显示 -->
+                                            <Border Grid.Column="0" Width="18" Height="18" VerticalAlignment="Top" Margin="0,5,4,0"
+                                                    IsVisible="{Binding $parent[ui:MainWindow].IsSelectionMode}"
+                                                    Tapped="MessageCheckbox_Tapped">
+                                                <Panel>
+                                                    <Border Width="18" Height="18" CornerRadius="9" BorderBrush="{DynamicResource AppBorder}" BorderThickness="1.5"
+                                                            Background="{DynamicResource CardBackground}" IsVisible="{Binding !IsSelected}"/>
+                                                    <Border Width="18" Height="18" CornerRadius="9" Background="{DynamicResource AccentColor}" IsVisible="{Binding IsSelected}">
+                                                        <PathIcon Data="{StaticResource CheckIcon}" Width="10" Height="10" Foreground="{DynamicResource AccentForeground}"/>
+                                                    </Border>
+                                                </Panel>
+                                            </Border>
+
+                                            <!-- 收到的消息：头像在左 -->
+                                            <Border Grid.Column="1" Width="22" Height="22" CornerRadius="6" Background="{DynamicResource SurfaceBackgroundHover}"
+                                                    VerticalAlignment="Top" IsVisible="{Binding !IsOut}">
+                                                <PathIcon Data="{StaticResource PhoneIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="2" Margin="6,0" HorizontalAlignment="Stretch">
+                                                <!-- 悬停工具条 -->
+                                                <StackPanel Classes="msgTools" Classes.out="{Binding IsOut}" Orientation="Horizontal" Spacing="2"
+                                                            IsVisible="{Binding $parent[ui:MainWindow].IsToolsEnabled}">
+                                                    <Button Classes="iconBtnSmall" Click="CopyMessage_Click" CommandParameter="{Binding Id}" ToolTip.Tip="复制" IsVisible="{Binding IsText}">
+                                                        <PathIcon Data="{StaticResource CopyIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                                    </Button>
+                                                    <Button Classes="iconBtnSmall" Click="ResendMessage_Click" CommandParameter="{Binding Id}" ToolTip.Tip="重发" IsVisible="{Binding IsText}">
+                                                        <PathIcon Data="{StaticResource SendIcon}" Width="12" Height="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                                    </Button>
+                                                    <Button Classes="iconBtnSmall" Click="DeleteMessage_Click" CommandParameter="{Binding Id}" ToolTip.Tip="删除">
+                                                        <PathIcon Data="{StaticResource DeleteIcon}" Width="12" Height="12" Foreground="{DynamicResource DangerColor}"/>
+                                                    </Button>
+                                                </StackPanel>
+
+                                                <!-- 文本气泡：支持选中部分文本复制；右键可复制所选；失焦不清除选区 -->
+                                                <Border Classes="bubble" Classes.out="{Binding IsOut}" IsVisible="{Binding IsText}">
+                                                    <ui:PersistentSelectableTextBlock Text="{Binding Text}" FontSize="13" LineHeight="21" TextWrapping="Wrap">
+                                                        <ContextMenu>
+                                                            <MenuItem Header="复制" Click="CopySelection_Click"/>
+                                                        </ContextMenu>
+                                                    </ui:PersistentSelectableTextBlock>
+                                                </Border>
+
+                                                <!-- 文件卡片 -->
+                                                <Border Classes="fcard" Classes.out="{Binding IsOut}" Classes.fail="{Binding IsFailed}" IsVisible="{Binding IsFile}"
+                                                        Tapped="FailedCard_Tapped" Tag="{Binding Id}">
+                                                    <StackPanel>
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <StackPanel VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding FileName}" FontSize="12" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="{Binding StateText}" FontSize="11" Margin="0,1,0,0"
+                                                                           Classes.fail="{Binding IsFailed}"/>
+                                                            </StackPanel>
+                                                            <Border Grid.Column="1" Width="30" Height="30" CornerRadius="7" Background="{DynamicResource WifiBadgeBackground}" VerticalAlignment="Top" Margin="8,0,0,0">
+                                                                <PathIcon Data="{StaticResource FileIcon}" Width="15" Height="15" Foreground="{DynamicResource WifiBadgeForeground}"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <!-- 发出的消息：头像在右 -->
+                                            <Border Grid.Column="3" Width="22" Height="22" CornerRadius="6" Background="{DynamicResource OutBubbleBackground}"
+                                                    BorderBrush="{DynamicResource OutBubbleBorder}" BorderThickness="1" VerticalAlignment="Top" IsVisible="{Binding IsOut}">
+                                                <TextBlock Text="我" FontSize="10" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.DataTemplates>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <!-- 空会话 / 未选择设备 -->
+                        <StackPanel IsVisible="{Binding ShowThreadEmpty}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" TextBlock.TextAlignment="Center">
+                            <PathIcon Data="{StaticResource ChatIcon}" Width="42" Height="42" Foreground="{DynamicResource AppForegroundSecondary}" Opacity="0.45" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding ThreadEmptyTitle}" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="下面既发文字也发文件：&#x0a;拖进来成为附件，回车一起发出去。" FontSize="12" Foreground="{DynamicResource AppForegroundSecondary}" TextAlignment="Center" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Panel>
+                </Border>
+
+                <!-- 融合输入条 -->
+                <Border Grid.Row="3" IsVisible="{Binding HasSelection}" BorderBrush="{DynamicResource AppBorder}" BorderThickness="0,1,0,0"
+                        Background="{DynamicResource SurfaceBackground}" Padding="12,8,12,10"
+                        DragDrop.AllowDrop="True" DragDrop.DragOver="PayloadArea_DragOver" DragDrop.Drop="PayloadArea_Drop">
+                    <Panel>
+                    <StackPanel IsVisible="{Binding !IsSelectionMode}">
+
+                        <!-- 附件 chips -->
+                        <ScrollViewer MaxHeight="60" VerticalScrollBarVisibility="Auto" Margin="0,0,0,7" IsVisible="{Binding HasSelectedFiles}">
+                            <ItemsControl x:Name="AttachChips" ItemsSource="{Binding SelectedPayloads}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="core:PayloadItem">
+                                        <Border Classes="chip" Classes.dir="{Binding IsFolder}" Margin="0,0,5,5">
+                                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                                <PathIcon Data="{StaticResource FolderIcon}" Width="12" Height="12" VerticalAlignment="Center" IsVisible="{Binding IsFolder}" Foreground="{DynamicResource WifiBadgeForeground}"/>
+                                                <PathIcon Data="{StaticResource FileIcon}" Width="12" Height="12" VerticalAlignment="Center" IsVisible="{Binding IsFile}" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                                <TextBlock Text="{Binding Name}" FontSize="11" VerticalAlignment="Center" MaxWidth="118" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding DisplaySize}" FontSize="11" VerticalAlignment="Center" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                                <Button Classes="chipRemove" Click="RemovePayload_Click" CommandParameter="{Binding Id}" VerticalAlignment="Center" ToolTip.Tip="移除">
+                                                    <PathIcon Data="{StaticResource CloseIcon}" Width="9" Height="9" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <!-- 输入框：96 起步，可拖高到 200；Enter 发送在 code-behind 以隧道事件注册，先于 TextBox 的换行处理 -->
+                        <Panel>
+                            <TextBox x:Name="ComposerBox" Text="{Binding TextDraft, Mode=TwoWay}" Height="96" MinHeight="96" MaxHeight="200"
+                                     AcceptsReturn="True" TextWrapping="Wrap" FontSize="13" Padding="10,8,10,14"
+                                     PlaceholderText="输入要发送的文本，或先添加文件…（Enter 发送 · Shift+Enter 换行）"/>
+                            <Thumb x:Name="ComposerGrip" Width="14" Height="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,4,3" Cursor="BottomSide"/>
+                        </Panel>
+
+                        <!-- 底栏：文件 / 文件夹 / 汇总 / 清空 / 发送 -->
+                        <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto" Margin="0,7,0,0">
+                            <Button Grid.Column="0" Classes="iconBtnSmall" Click="AddFilesButton_Click" ToolTip.Tip="添加文件">
+                                <PathIcon Data="{StaticResource FileIcon}" Width="14" Height="14" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                            </Button>
+                            <Button Grid.Column="1" Classes="iconBtnSmall" Click="AddFolderButton_Click" ToolTip.Tip="添加文件夹" Margin="2,0,0,0">
+                                <PathIcon Data="{StaticResource FolderIcon}" Width="14" Height="14" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                            </Button>
+                            <TextBlock Grid.Column="2" Text="{Binding SelectionSummaryText}" FontSize="11" Foreground="{DynamicResource AppForegroundSecondary}"
+                                       VerticalAlignment="Center" Margin="6,0,0,0"/>
+                            <Button Grid.Column="4" Classes="Danger" Content="清空" FontSize="11" Padding="6,2" Click="ClearSelectionButton_Click"
+                                    VerticalAlignment="Center" IsVisible="{Binding HasSelectedFiles}"/>
+                            <Button Grid.Column="5" Classes="Primary" Click="ExecuteSendButton_Click" IsEnabled="{Binding CanSend}" Padding="16,5" FontSize="12.5">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <PathIcon Data="{StaticResource SendIcon}" Width="13" Height="13"/>
+                                    <TextBlock Text="发送" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- 多选模式底栏 -->
+                    <Grid IsVisible="{Binding IsSelectionMode}" ColumnDefinitions="Auto,*,Auto,Auto,Auto" Height="50">
+                        <TextBlock Text="{Binding SelectedCountText}" VerticalAlignment="Center" FontSize="12"/>
+                        <Button Grid.Column="2" Classes="miniAction" Content="{Binding SelectAllText}" Height="26" Click="SelectAll_Click" VerticalAlignment="Center"/>
+                        <Button Grid.Column="3" Classes="Danger" Content="删除" FontSize="12" Click="DeleteSelected_Click" VerticalAlignment="Center" Margin="8,0,0,0" IsEnabled="{Binding HasSelectedMessages}"/>
+                        <Button Grid.Column="4" Classes="miniAction" Content="取消" Height="26" Click="ToggleSelection_Click" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                    </Grid>
+                    </Panel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+    </LayoutTransformControl>
+</Window>

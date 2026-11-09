@@ -1,0 +1,205 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+    const primaryBtn = document.getElementById('primary-download-btn');
+
+    let userOS = "Unknown OS";
+    let is64Bit = false;
+
+    const ua = navigator.userAgent;
+    if (ua.indexOf("Win") !== -1) {
+        userOS = "Windows";
+        if (ua.indexOf("WOW64") !== -1 || ua.indexOf("Win64") !== -1 || ua.indexOf("x64") !== -1) {
+            is64Bit = true;
+        }
+    } else if (ua.indexOf("Linux") !== -1 || ua.indexOf("X11") !== -1) {
+        userOS = "Linux";
+    } else if (ua.indexOf("Mac") !== -1) {
+        userOS = "MacOS";
+    }
+
+    if (primaryBtn) {
+        if (userOS === "Windows") {
+            if (is64Bit) {
+                primaryBtn.textContent = "Download for Windows (64-bit)";
+                primaryBtn.href = "https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Setup_x64.exe";
+            } else {
+                primaryBtn.textContent = "Download for Windows (32-bit)";
+                primaryBtn.href = "https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Setup_x86.exe";
+            }
+        } else if (userOS === "Linux") {
+            primaryBtn.textContent = "Install for Linux";
+            primaryBtn.href = "#";
+            primaryBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const linuxModal = document.getElementById('linuxInstallModal');
+                if (linuxModal) {
+                    linuxModal.showModal();
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        } else {
+            primaryBtn.textContent = "Download Release";
+        }
+    }
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
+
+    let savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem('theme');
+    } catch (e) {
+        console.warn('localStorage is blocked or unavailable.');
+    }
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            try { localStorage.setItem('theme', 'light'); } catch (e) {}
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+        }
+    });
+
+    const privacyModal = document.getElementById('privacyModal');
+    const privacyOpenBtn = document.getElementById('privacyOpenBtn');
+    const privacyCloseBtn = document.getElementById('privacyCloseBtn');
+
+    if (privacyModal && privacyOpenBtn && privacyCloseBtn) {
+        privacyOpenBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            privacyModal.showModal();
+            document.body.style.overflow = 'hidden';
+        });
+
+        privacyCloseBtn.addEventListener('click', () => {
+            privacyModal.close();
+        });
+
+        privacyModal.addEventListener('close', () => {
+            document.body.style.overflow = '';
+        });
+
+        privacyModal.addEventListener('click', (e) => {
+            const dialogDimensions = privacyModal.getBoundingClientRect();
+            if (
+                e.clientX < dialogDimensions.left ||
+                e.clientX > dialogDimensions.right ||
+                e.clientY < dialogDimensions.top ||
+                e.clientY > dialogDimensions.bottom
+            ) {
+                privacyModal.close();
+            }
+        });
+    }
+
+    const linuxModal = document.getElementById('linuxInstallModal');
+    const linuxCloseBtn = document.getElementById('linuxInstallCloseBtn');
+
+    if (linuxModal && linuxCloseBtn) {
+        linuxCloseBtn.addEventListener('click', () => {
+            linuxModal.close();
+        });
+
+        linuxModal.addEventListener('close', () => {
+            document.body.style.overflow = '';
+        });
+
+        linuxModal.addEventListener('click', (e) => {
+            const dialogDimensions = linuxModal.getBoundingClientRect();
+            if (
+                e.clientX < dialogDimensions.left ||
+                e.clientX > dialogDimensions.right ||
+                e.clientY < dialogDimensions.top ||
+                e.clientY > dialogDimensions.bottom
+            ) {
+                linuxModal.close();
+            }
+        });
+    }
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+    const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link, .mobile-cta-btn');
+
+    if (mobileMenuBtn && mobileNavDrawer) {
+        const openMobileMenu = () => {
+            mobileNavDrawer.classList.add('is-open');
+            mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            mobileNavDrawer.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeMobileMenu = () => {
+            mobileNavDrawer.classList.remove('is-open');
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            mobileNavDrawer.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        };
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isOpen = mobileNavDrawer.classList.contains('is-open');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+
+        if (mobileNavBackdrop) {
+            mobileNavBackdrop.addEventListener('click', closeMobileMenu);
+        }
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNavDrawer.classList.contains('is-open')) {
+                closeMobileMenu();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && mobileNavDrawer.classList.contains('is-open')) {
+                closeMobileMenu();
+            }
+        });
+    }
+
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            const answer = btn.nextElementSibling;
+
+            faqQuestions.forEach(otherBtn => {
+                if (otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true') {
+                    otherBtn.setAttribute('aria-expanded', 'false');
+                    if (otherBtn.nextElementSibling) {
+                        otherBtn.nextElementSibling.style.maxHeight = null;
+                    }
+                }
+            });
+
+            if (isExpanded) {
+                btn.setAttribute('aria-expanded', 'false');
+                answer.style.maxHeight = null;
+            } else {
+                btn.setAttribute('aria-expanded', 'true');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+});

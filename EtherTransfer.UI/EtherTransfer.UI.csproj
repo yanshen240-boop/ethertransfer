@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>EtherTransfer</AssemblyName>
+    <!-- 标准构建使用普通用户权限；便携版构建（-p:PortableBuild=true）请求管理员权限以便自动配置防火墙。
+         注意：在两种构建之间切换时，请先删除 obj 下的 apphost.exe 与 *Up2Date 缓存文件，否则旧清单可能被复用。 -->
+    <ApplicationManifest Condition="'$(PortableBuild)' == 'true'">app.portable.manifest</ApplicationManifest>
+    <ApplicationManifest Condition="'$(PortableBuild)' != 'true'">app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
+    <Version>0.7.0</Version>
+    <Company>DS Labs</Company>
+    <Product>EtherTransfer</Product>
+    <Description>基于以太网直连的极速跨平台文件与文件夹传输工具。</Description>
+    <Copyright>Copyright © 2026 DS Labs</Copyright>
+
+        <!-- Ultra-fast startup optimizations -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+
+    <!-- 单文件发布时压缩程序集（147MB → 约 80-90MB） -->
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <TieredCompilation>true</TieredCompilation>
+    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+
+    <!-- Memory footprint optimizations -->
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <!-- Instructs the GC to aggressively return freed memory to the OS -->
+    <RetainVMGarbageCollection>false</RetainVMGarbageCollection>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EtherTransfer.Services\EtherTransfer.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <!-- 发布时剔除所有 PDB（其中 libSkiaSharp.pdb 84MB + libHarfBuzzSharp.pdb 20MB 是
+       SkiaSharp/HarfBuzzSharp 原生库自带的调试符号，发布产物中纯属无用资源） -->
+  <Target Name="RemovePdbsFromPublish" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <FilesToPublish Remove="@(FilesToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
+</Project>

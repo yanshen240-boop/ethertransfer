@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EtherTransfer | Direct PC-to-PC File Transfer via Ethernet Cable (100% Offline, Zero-Config)</title>
+    <meta name="description" content="Transfer massive files and entire folders directly between two PCs using an Ethernet cable. 100% offline, zero configuration, no router or internet required. Free & open-source for Windows & Linux.">
+    <meta name="keywords" content="EtherTransfer, ethernet file transfer, direct pc to pc file transfer, transfer files pc to pc ethernet cable, lan cable file transfer without router, transfer files from pc to pc without internet, offline computer to computer transfer, direct ethernet file transfer windows 11, transfer large files laptop to laptop, crossover cable alternative, open source lan transfer, fast pc file sharing">
+    <meta name="author" content="Divy Viradiya (DS Labs)">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://divyviradiya2.github.io/ethertransfer/">
+    <meta name="google-site-verification" content="xo-fJdA8-y3mHNGwgR5dmHEUCVLoCD04pnYCqhpPVao">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://divyviradiya2.github.io/ethertransfer/">
+    <meta property="og:title" content="EtherTransfer | Direct PC-to-PC File Transfer via Ethernet Cable">
+    <meta property="og:description" content="Move massive files and folder trees directly between two PCs at full Ethernet speed. 100% offline, zero setup, no router or internet needed.">
+    <meta property="og:image" content="https://divyviradiya2.github.io/ethertransfer/assets/logo.png">
+    <meta property="og:site_name" content="EtherTransfer">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://divyviradiya2.github.io/ethertransfer/">
+    <meta name="twitter:title" content="EtherTransfer | Direct PC-to-PC File Transfer via Ethernet Cable">
+    <meta name="twitter:description" content="Transfer massive files directly between two computers via Ethernet cable. 100% offline, no router, free & open-source.">
+    <meta name="twitter:image" content="https://divyviradiya2.github.io/ethertransfer/assets/logo.png">
+    <meta name="theme-color" content="#2563eb">
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "EtherTransfer",
+      "operatingSystem": "Windows 10, Windows 11, Linux",
+      "applicationCategory": "UtilitiesApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "EtherTransfer is an open-source utility for high-speed, direct PC-to-PC file and folder transfers over an Ethernet cable without a router, internet, or manual network configuration.",
+      "softwareVersion": "0.3.0",
+      "downloadUrl": "https://github.com/divyviradiya2/ethertransfer/releases/latest",
+      "url": "https://divyviradiya2.github.io/ethertransfer/",
+      "image": "https://divyviradiya2.github.io/ethertransfer/assets/logo.png",
+      "author": {
+        "@type": "Person",
+        "name": "Divy Viradiya",
+        "url": "https://github.com/divyviradiya2"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DS Labs",
+        "url": "https://github.com/divyviradiya2/ethertransfer"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I transfer large files directly between two PCs using an Ethernet cable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Plug a standard Ethernet (LAN) cable directly into both computers and open EtherTransfer on both machines. The app automatically discovers the connected PC using link-local discovery without needing a router, switch, or manual IP configuration. Select your files or folders and click Send to transfer at full Gigabit speeds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a crossover cable or will a regular Ethernet cable work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A regular, standard Ethernet cable (Cat 5e, Cat 6, Cat 6a, Cat 7, or Cat 8) works perfectly. Modern network interface cards (NICs) support Auto-MDI/MDIX, which automatically switches the send and receive pins. Legacy crossover cables are also 100% compatible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I connect multiple computers together through an Ethernet switch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EtherTransfer works both point-to-point (1-to-1) with a direct cable and across unmanaged/managed Ethernet switches (multi-device). When multiple PCs running EtherTransfer are plugged into the same switch, they automatically discover each other via UDP broadcasts and populate the Discovered Devices list for selective transfers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my laptop doesn't have an Ethernet port?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Any standard USB-A, USB-C, or Thunderbolt-to-Ethernet adapter/dongle (Realtek RTL8153, ASIX AX88179, etc.) works out of the box with zero drivers needed. Direct point-to-point Thunderbolt 3/4/USB4 networking cables are also supported."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does EtherTransfer work completely offline without internet or Wi-Fi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, EtherTransfer is 100% offline. Data travels exclusively through the physical Ethernet wire from PC to PC. No internet connection, Wi-Fi router, cloud servers, or external telemetry are involved, making it ideal for air-gapped systems and sensitive data."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I transfer files between Windows and Linux computers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EtherTransfer provides seamless cross-platform compatibility between Windows (10 & 11) and Linux distributions (Ubuntu, Debian, Fedora, Arch, CentOS). Directory paths and file metadata are automatically normalized during the transfer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How fast is direct Ethernet file transfer compared to Wi-Fi or USB?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Direct Gigabit Ethernet achieves payload transfer speeds of 110 MB/s to 115 MB/s (~1 Gbps TCP payload saturation), and 10GbE single-stream transfers reach 450 MB/s to 850 MB/s depending on storage speed and CPU interrupt handling. A 100 GB dataset transfers in roughly 14 minutes on Gigabit Ethernet, compared to over 1.5 hours on typical Wi-Fi and 4+ hours on cloud storage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to configure static IP addresses or change network adapter settings?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EtherTransfer uses automatic peer discovery over link-local IPv4 addresses (APIPA 169.254.x.x). There are zero IP addresses to configure, zero network adapter settings to change, and zero router port forwards required."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Transfer Large Files Between Two Computers via Ethernet Cable",
+      "description": "Step-by-step guide to transferring massive datasets and intact folder trees directly between two PCs using an Ethernet cable with EtherTransfer.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Connect the Ethernet Cable",
+          "text": "Connect a standard RJ-45 Ethernet cable directly between the LAN network ports of Computer A and Computer B.",
+          "position": 1
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Launch EtherTransfer on Both Machines",
+          "text": "Open EtherTransfer on both PCs. The computers automatically discover each other in the Discovered Devices list.",
+          "position": 2
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Select Files or Folders",
+          "text": "Click Add Files or Add Folder on the sending computer to stage your data.",
+          "position": 3
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Accept and Stream at Full Speed",
+          "text": "Click Send. The receiving computer prompts to choose a destination directory and accept the transfer, streaming files at full gigabit speed.",
+          "position": 4
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <header class="top-nav">
+        <div class="nav-container">
+            <div class="brand">
+                <img src="assets/logo.png" alt="Logo" class="logo">
+                <span class="brand-name">EtherTransfer</span>
+            </div>
+            <div class="nav-controls">
+                <div class="nav-links">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#guide" class="nav-link">Guide</a>
+                    <a href="docs.html" class="nav-link">Docs</a>
+                    <a href="#comparison" class="nav-link">Comparison</a>
+                    <a href="#downloads" class="nav-link">Downloads</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                    <a href="https://github.com/divyviradiya2/ethertransfer" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
+                </div>
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                        <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                    <a href="#downloads" class="btn-primary small-btn">Download</a>
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                        <span class="hamburger-bar"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true">
+        <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+        <div class="mobile-nav-panel">
+            <nav class="mobile-nav-links">
+                <a href="#features" class="mobile-nav-link">
+                    <span>Features</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="#guide" class="mobile-nav-link">
+                    <span>Guide</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="docs.html" class="mobile-nav-link">
+                    <span>Documentation</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="#comparison" class="mobile-nav-link">
+                    <span>Speed Comparison</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="#downloads" class="mobile-nav-link">
+                    <span>All Downloads</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="#faq" class="mobile-nav-link">
+                    <span>FAQ</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                <a href="https://github.com/divyviradiya2/ethertransfer" target="_blank" rel="noopener noreferrer" class="mobile-nav-link external">
+                    <span>GitHub Repository</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+            </nav>
+            <div class="mobile-nav-actions">
+                <a href="#downloads" class="btn-primary mobile-cta-btn">Get EtherTransfer</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-wrapper">
+        <main>
+
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Transfer large files and folders between two PCs via Ethernet cable.</h1>
+                    <p class="hero-subtitle">No router required. EtherTransfer is a simple, open-source utility designed to move massive datasets directly between computers. No internet or network configuration needed.</p>
+
+                    <div class="action-row">
+                        <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest" class="btn-primary" id="primary-download-btn">Download Release</a>
+                        <a href="#downloads" class="btn-secondary">All Downloads</a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="concept-diagram">
+
+                        <div class="concept-pc">
+                            <div class="pc-monitor">
+                                <div class="mock-screen"></div>
+                            </div>
+                            <div class="pc-base"></div>
+                            <span class="pc-label">Sender PC</span>
+                        </div>
+
+                        <div class="concept-link">
+                            <div class="link-info">Direct Ethernet Cable</div>
+                            <div class="cable-track">
+                                <div class="cable-wire"></div>
+                                <div class="data-packet p1">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                </div>
+                                <div class="data-packet p2">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+                                </div>
+                                <div class="data-packet p3">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="concept-pc">
+                            <div class="pc-monitor">
+                                <div class="mock-screen"></div>
+                            </div>
+                            <div class="pc-base"></div>
+                            <span class="pc-label">Receiver PC</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="features" class="features-section">
+                <h2>Why EtherTransfer Exists</h2>
+                <div class="features-list">
+                    <div class="feature-row">
+                        <div class="feature-label">
+                            <div class="f-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                            </div>
+                            <h3>Zero Network Configuration</h3>
+                        </div>
+                        <div class="feature-desc">
+                            <p>Plug in a standard Ethernet cable and launch EtherTransfer. Automatic Link-Local (APIPA RFC 3927) and Linux <code>nmcli</code> configuration handle IP negotiation automatically. No manual IP math, no DHCP servers, and no routers required.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-label">
+                            <div class="f-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            </div>
+                            <h3>Physical Interface Pinning</h3>
+                        </div>
+                        <div class="feature-desc">
+                            <p>EtherTransfer binds sockets strictly to physical Ethernet adapters, filtering out Wi-Fi and VPN routes. You can continue browsing the web on Wi-Fi while massive gigabyte files saturate the physical cable.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-label">
+                            <div class="f-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                            </div>
+                            <h3>High-Speed Folder Streaming</h3>
+                        </div>
+                        <div class="feature-desc">
+                            <p>Drag and drop deep folder hierarchies, repositories with thousands of files, or game installs. Powered by zero-allocation binary framing and parallel disk worker pools (4–16 threads) that overcome Windows NTFS small-file latency for wire-speed folder streaming.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-label">
+                            <div class="f-icon">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                            </div>
+                            <h3>Cross-Platform Windows & Linux</h3>
+                        </div>
+                        <div class="feature-desc">
+                            <p>Seamlessly transfer files between Windows (10/11) and Linux without SMB permission conflicts, Samba server setup, or user account mapping.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="philosophy-section" style="padding: 2.5rem 1rem; margin: 2rem 0; background: var(--bg-card); border-radius: 1rem; border: 1px solid var(--border-color);">
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <blockquote style="font-size: 1.15rem; font-style: italic; color: var(--text-main); margin-bottom: 1rem;">
+                        &ldquo;Making something complex is easy. Making something simple is much harder.&rdquo;
+                    </blockquote>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
+                        EtherTransfer was built for creators, developers, and users who want to move large data across an Ethernet cable without network administration overhead. If you already maintain a dedicated NAS, enterprise VLANs, Samba/NFS domains, or prefer manual Netcat / CLI terminal pipelines, you are completely free to use those tools. EtherTransfer exists under the <strong>MIT License</strong> for anyone who values a zero-fuss, plug-and-transfer workflow that works out of the box.
+                    </p>
+                </div>
+            </section>
+
+            <section id="guide" class="usage-section">
+                <h2>Visual Guide</h2>
+
+                <div class="visual-steps">
+
+                    <div class="visual-step">
+                        <div class="step-text">
+                            <div class="step-badge">Step 1</div>
+                            <h3>Connect the Ethernet Cable</h3>
+                            <p>Plug a standard Ethernet cable directly into the network ports of both computers. Modern Gigabit+ NICs support Auto-MDIX (IEEE 802.3ab), so standard patch cables work without crossover adapters.</p>
+                        </div>
+                        <div class="step-visual">
+                            <div class="visual-box">
+                                <div class="diagram">
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    </div>
+                                    <div class="connection-path">
+                                        <div class="connector left"></div>
+                                        <div class="cable"></div>
+                                        <div class="connector right"></div>
+                                        <div class="packet p1"></div>
+                                        <div class="packet p2"></div>
+                                        <div class="packet p3"></div>
+                                        <div class="connection-label">Ethernet Cable</div>
+                                    </div>
+                                    <div class="node-icon">
+                                        <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" stroke-width="1.5" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visual-step reverse">
+                        <div class="step-text">
+                            <div class="step-badge">Step 2</div>
+                            <h3>Launch & Discover</h3>
+                            <p>Launch EtherTransfer on both PCs. Decentralized UDP discovery automatically identifies the connected machine over the wire within 1–3 seconds.</p>
+                        </div>
+                        <div class="step-visual">
+                            <div class="visual-box">
+                                <div class="ui-mockup main-window">
+                                    <div class="ui-header">
+                                        <div class="ui-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+                                        <div class="ui-title">EtherTransfer</div>
+                                    </div>
+                                    <div class="ui-body split">
+                                        <div class="ui-sidebar">
+                                            <div class="ui-sidebar-title">Discovered Devices</div>
+                                            <div class="ui-device-item active">
+                                                <div class="device-icon"></div>
+                                                <div class="device-info">
+                                                    <div class="d-name">Receiver-PC</div>
+                                                    <div class="d-ip">169.254.12.5</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-main">
+                                            <div class="ui-main-header">
+                                                <div class="ui-main-title">Files to Transfer</div>
+                                                <div class="ui-btn-group">
+                                                    <div class="ui-btn">Add Folder</div>
+                                                    <div class="ui-btn">Add Files</div>
+                                                </div>
+                                            </div>
+                                            <div class="ui-file-area">
+                                                <div class="ui-file-item"> project_data.zip</div>
+                                                <div class="ui-file-item"> video_render.mp4</div>
+                                            </div>
+                                            <div class="ui-main-footer">
+                                                <div class="ui-btn primary full">Send to Device</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visual-step">
+                        <div class="step-text">
+                            <div class="step-badge">Step 3</div>
+                            <h3>Explicit Receiver Consent</h3>
+                            <p>When you click Send, the receiving computer receives an authorization prompt displaying the sender name, total file count, and payload size before accepting.</p>
+                        </div>
+                        <div class="step-visual">
+                            <div class="visual-box">
+                                <div class="ui-mockup dialog">
+                                    <div class="ui-header"><div class="ui-title">Transfer Window</div></div>
+                                    <div class="ui-body dialog-body">
+                                        <div class="d-title">Incoming Transfer</div>
+                                        <div class="d-desc">Sender-PC wants to send 2 files (4.2 GB).</div>
+                                        <div class="d-save-row">
+                                            <div class="d-save-input">C:\Downloads</div>
+                                            <div class="ui-btn">Change</div>
+                                        </div>
+                                        <div class="d-actions">
+                                            <div class="ui-btn">Decline</div>
+                                            <div class="ui-btn primary">Accept</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visual-step reverse">
+                        <div class="step-text">
+                            <div class="step-badge">Step 4</div>
+                            <h3>Full-Speed Streaming</h3>
+                            <p>Once accepted, files stream using a 32 MB double-buffered pipelined channel engine with unbuffered direct kernel I/O. Real-time transfer speed, progress percentage, and elapsed metrics display continuously.</p>
+                        </div>
+                        <div class="step-visual">
+                            <div class="visual-box">
+                                <div class="ui-mockup dialog">
+                                    <div class="ui-header"><div class="ui-title">Transfer Window</div></div>
+                                    <div class="ui-body dialog-body">
+                                        <div class="d-title">Transferring</div>
+                                        <div class="d-desc">video_render.mp4 (1/2)</div>
+                                        <div class="d-progress-bar"><div class="d-progress-fill"></div></div>
+                                        <div class="d-stats">
+                                            <span>450 MB / 4.2 GB</span>
+                                            <span class="d-accent">12%</span>
+                                            <span>115 MB/s</span>
+                                        </div>
+                                        <div class="ui-btn danger mt-2">Cancel</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="comparison" class="comparison-section">
+                <div class="section-header">
+                    <h2>Comparison With Existing Tools</h2>
+                    <p>An objective technical comparison between EtherTransfer, network file sharing, and physical storage methods.</p>
+                </div>
+
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Solution</th>
+                                <th>Primary Strength</th>
+                                <th>Direct Cable Workflow</th>
+                                <th>Zero Router Required</th>
+                                <th>Achievable Speed</th>
+                                <th>Security Model</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight-row">
+                                <td>
+                                    <div class="table-method">
+                                        <strong>EtherTransfer</strong>
+                                    </div>
+                                </td>
+                                <td>Zero-config P2P physical transfers</td>
+                                <td>Automated (Pins physical Ethernet)</td>
+                                <td>Yes (Link-Local APIPA)</td>
+                                <td class="speed-val">110 &ndash; 115 MB/s (1G) &middot; 450 &ndash; 850 MB/s (10G single-stream)</td>
+                                <td>Plaintext local wire (UI consent gate)</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-method">
+                                        <strong>LocalSend</strong>
+                                    </div>
+                                </td>
+                                <td>Cross-platform Wi-Fi sharing (iOS/Android/PC)</td>
+                                <td>Manual (Defaults to Wi-Fi route)</td>
+                                <td>Yes (Requires manual IP setup on cable)</td>
+                                <td class="speed-val">20 &ndash; 80 MB/s (Wi-Fi) &middot; Up to 90 &ndash; 110 MB/s (Wired LAN)</td>
+                                <td>TLS 1.3 / HTTPS</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-method">
+                                        <strong>Windows / Samba SMB</strong>
+                                    </div>
+                                </td>
+                                <td>Persistent network drive mounts & streaming</td>
+                                <td>Requires manual static IP or NetBIOS setup</td>
+                                <td>Requires manual static IP without router</td>
+                                <td class="speed-val">30 &ndash; 115 MB/s (1G) &middot; Up to 1,000 MB/s (10G with Multichannel)</td>
+                                <td>SMB 3.1.1 AES-128/256</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-method">
+                                        <strong>Syncthing</strong>
+                                    </div>
+                                </td>
+                                <td>Continuous bi-directional folder syncing</td>
+                                <td>Complex (Requires pairing & discovery setup)</td>
+                                <td>Requires local network or relay server</td>
+                                <td class="speed-val">50 &ndash; 110 MB/s (Large files on Gigabit LAN; CPU hashing overhead on small files)</td>
+                                <td>TLS 1.3 Block Sync</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="table-method">
+                                        <strong>USB 3.0 External Drive</strong>
+                                    </div>
+                                </td>
+                                <td>Offline physical portability</td>
+                                <td>Plug in, copy twice (two-phase transfer)</td>
+                                <td>Yes (Physical media)</td>
+                                <td class="speed-val">40 &ndash; 110 MB/s (External HDD / flash drive; effective 2x copy time)</td>
+                                <td>Optional (BitLocker)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="downloads" class="downloads-section">
+                <div class="downloads-header">
+                    <h2>Get EtherTransfer</h2>
+                    <p>Choose your platform below to download the latest version.</p>
+                </div>
+
+                <div class="downloads-grid">
+
+                    <div class="download-card">
+                        <div class="os-icon">
+                            <img src="assets/windows.png" alt="Windows" width="32" height="32" class="os-asset invert-on-dark">
+                        </div>
+                        <h3>Windows Setup</h3>
+                        <p>Standard installer for Windows 10 and 11 with automatic firewall rule configuration and desktop shortcuts.</p>
+                        <div class="dl-actions">
+                            <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Setup_x64.exe" class="btn-primary dl-btn">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                64-bit Setup
+                            </a>
+                            <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Setup_x86.exe" class="ui-btn dl-btn-alt">
+                                32-bit Setup
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="download-card">
+                        <div class="os-icon">
+                            <svg viewBox="0 0 24 24" width="30" height="30" stroke="currentColor" stroke-width="2" fill="none" class="os-asset"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        </div>
+                        <h3>Windows Portable</h3>
+                        <p>Zero-install standalone single-file executable. No administrator rights or registry changes required. Run directly from USB.</p>
+                        <div class="dl-actions">
+                            <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Portable_x64.exe" class="btn-primary dl-btn">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                64-bit Portable
+                            </a>
+                            <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest/download/EtherTransfer_Portable_x86.exe" class="ui-btn dl-btn-alt">
+                                32-bit Portable
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="download-card">
+                        <div class="os-icon">
+                            <img src="assets/linux.png" alt="Linux" width="32" height="32" class="os-asset">
+                        </div>
+                        <h3>Linux</h3>
+                        <p>One unified script automatically handles installation across all major Linux distributions.</p>
+                        <div class="code-box">
+                            <code>curl -sSL https://raw.githubusercontent.com/divyviradiya2/ethertransfer/master/install_linux.sh | sudo bash</code>
+                            <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -sSL https://raw.githubusercontent.com/divyviradiya2/ethertransfer/master/install_linux.sh | sudo bash'); const btn = this; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = 'Copy', 2000);">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="faq" class="faq-section">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Concrete technical answers regarding direct Ethernet file transfers.</p>
+                </div>
+
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Do I need a crossover cable or will a standard Ethernet cable work?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>A standard straight-through patch cable (Cat 5e, Cat 6, Cat 6a, Cat 7, or Cat 8) works perfectly. Virtually all Gigabit (1000BASE-T) and multi-gigabit network cards produced since 2000 implement <strong>Auto-MDI/MDIX</strong> (IEEE 802.3ab), which automatically crosses over the transmit and receive lines inside the physical layer hardware.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Can I use EtherTransfer while both computers are also connected to Wi-Fi?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. EtherTransfer inspects hardware PNP identifiers and physical device paths to filter out Wi-Fi and virtual network adapters. The transfer engine explicitly binds outgoing TCP sockets to the physical Ethernet adapter's local IP, ensuring multi-gigabyte transfers saturate the physical cable without interrupting your Wi-Fi internet connection.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>What throughput should I expect on 1GbE, 2.5GbE, 5GbE, and 10GbE?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>On 1 GbE, EtherTransfer sustains <strong>110–115 MB/s</strong>, saturating the physical TCP payload capacity. On 2.5 GbE, it reaches <strong>270–285 MB/s</strong> (requires SATA SSD or NVMe). On 5 GbE, single-stream transfers reach <strong>450–540 MB/s</strong>. On 10 GbE, a single plain TCP stream reaches <strong>450–850 MB/s</strong> (limited by standard 1500 MTU single-core interrupt load and sequential I/O). Full 10 GbE multi-stream socket saturation (1,150+ MB/s) is planned for a future release.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Why does transfer speed sometimes drop from 115 MB/s to 50 MB/s?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Speed drops during transfers typically result from three real-world factors: (1) <em>Many small files</em> (file creation overhead on disk dominates rather than network speed), (2) <em>SSD SLC cache exhaustion</em> (budget SSDs drop to TLC/QLC write speeds of 40–70 MB/s once their write cache fills up), or (3) <em>Mechanical hard drives</em> (HDDs max out around 60–100 MB/s sequential writes).</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Does EtherTransfer work through an Ethernet switch?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. When multiple computers running EtherTransfer are plugged into the same unmanaged or managed Ethernet switch, they discover each other via UDP broadcasts on port 50000 and appear in the Discovered Devices list for selective point-to-point transfers.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Can I transfer entire folders, game installs (Steam), and project trees?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. EtherTransfer natively scans and recreates arbitrary nested directory structures on the receiving drive without requiring prior zip archiving. Hidden configuration files (like <code>.gitignore</code> and <code>.env</code>) are preserved, while path traversal attacks (<code>../</code>) and illegal filename characters are strictly sanitized.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false">
+                            <span>Is EtherTransfer free and open-source?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. EtherTransfer is 100% free and open-source under the <strong>MIT License</strong>. There are zero subscriptions, zero ads, zero tracking telemetry, and zero accounts required.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="brand">
+                        <img src="assets/logo.png" alt="Logo" class="logo">
+                        <span class="brand-name">EtherTransfer</span>
+                    </div>
+                    <p class="copyright">Developed by Divy Viradiya (DS Labs).</p>
+                    <p class="copyright">Open source under the <a href="https://github.com/divyviradiya2/ethertransfer/blob/master/LICENSE" target="_blank" class="text-link">MIT License</a>.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="docs.html">Documentation</a>
+                    <a href="docs.html#architecture-networking">Architecture</a>
+                    <a href="docs.html#performance-benchmarks">Benchmarks</a>
+                    <a href="#" id="privacyOpenBtn">Privacy & System</a>
+                    <a href="https://github.com/divyviradiya2/ethertransfer">Source Code</a>
+                    <a href="https://github.com/divyviradiya2/ethertransfer/issues">Report Issue</a>
+                    <a href="https://github.com/divyviradiya2/ethertransfer/releases/latest">Download</a>
+                </div>
+            </div>
+        </footer>
+
+        <dialog id="privacyModal" class="privacy-modal">
+            <div class="modal-header">
+                <h3>Privacy & System Policy</h3>
+                <button id="privacyCloseBtn" class="close-modal" aria-label="Close dialog">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>EtherTransfer operates 100% offline. However, the installer modifies specific system settings to allow seamless computer-to-computer transfers.</p>
+
+                <h4>Network & Firewall</h4>
+                <p>The installer automatically whitelists EtherTransfer in the Windows Defender Firewall. On Linux, it detects and modifies UFW, Firewalld, or iptables to open Port 50000 (UDP Discovery) and Port 55000 (TCP Transfer) for direct peer transfers.</p>
+
+                <h4>System Dependencies</h4>
+                <p>On Linux, the script automatically uses your package manager (apt, dnf, pacman, etc.) to install the <code>network-manager</code> package if it is missing, as it is required for monitoring interface connectivity.</p>
+
+                <h4>Zero Telemetry Guarantee</h4>
+                <p>EtherTransfer does not include background tracking services, telemetry agents, or startup analytics hooks. Absolutely no data ever leaves your local network.</p>
+            </div>
+        </dialog>
+
+        <dialog id="linuxInstallModal" class="privacy-modal">
+            <div class="modal-header">
+                <h3>Linux Installation</h3>
+                <button id="linuxInstallCloseBtn" class="close-modal" aria-label="Close dialog">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>To install EtherTransfer on Linux, simply open your terminal and run the following command. The script will automatically detect your distribution and handle everything.</p>
+
+                <h4 style="margin-top: 2rem;">Install Command</h4>
+                <div class="code-box" style="margin-top: 0.5rem; margin-bottom: 1rem;">
+                    <code style="border: none;">curl -sSL https://raw.githubusercontent.com/divyviradiya2/ethertransfer/master/install_linux.sh | sudo bash</code>
+                    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -sSL https://raw.githubusercontent.com/divyviradiya2/ethertransfer/master/install_linux.sh | sudo bash'); const btn = this; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = 'Copy', 2000);">Copy</button>
+                </div>
+            </div>
+        </dialog>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="EtherTransfer.UI.TextMessageDialog"
+        Title="收到文本消息"
+        Icon="avares://EtherTransfer/Assets/logo.ico"
+        Width="520" Height="380"
+        MinWidth="420" MinHeight="300"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        CanResize="True"
+        Foreground="{DynamicResource AppForeground}">
+    <Border Background="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*,Auto" Margin="22">
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,14">
+                <PathIcon Data="{StaticResource SendIcon}" Width="26" Height="26" Foreground="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Name="SenderText" FontWeight="SemiBold" FontSize="16" Foreground="{DynamicResource AppForeground}"/>
+                    <TextBlock Name="TimeText" FontSize="12" Foreground="{DynamicResource AppForegroundSecondary}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Border Grid.Row="1" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="10">
+                <TextBox Name="ContentBox"
+                         IsReadOnly="True"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         FontSize="14"
+                         Foreground="{DynamicResource AppForeground}"/>
+            </Border>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,16,0,0">
+                <Button Content="复制文本" Click="Copy_Click" Padding="20,8"/>
+                <Button Content="知道了" Classes="Primary" Click="Close_Click" Padding="26,8"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

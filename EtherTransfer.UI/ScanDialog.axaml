@@ -1,0 +1,46 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:EtherTransfer.UI"
+        x:Class="EtherTransfer.UI.ScanDialog"
+        x:DataType="ui:ScanDialog"
+        Title="正在准备文件"
+        Icon="avares://EtherTransfer/Assets/logo.ico"
+        Width="440" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Foreground="{DynamicResource AppForeground}"
+        CanResize="False">
+
+    <Border Background="{DynamicResource SurfaceBackground}">
+        <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="正在准备文件" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource AppForeground}" HorizontalAlignment="Center"/>
+                <TextBlock Text="正在统计文件夹内容与文件大小..." FontSize="13" Foreground="{DynamicResource AppForegroundSecondary}" Margin="0,4,0,0" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="280">
+                <ItemsControl ItemsSource="{Binding ScanTasks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="ui:ScanProgressViewModel">
+                            <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding FolderName}" FontWeight="Medium" Foreground="{DynamicResource AppForeground}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource AppForegroundSecondary}" FontSize="12" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <ProgressBar Grid.Column="1" IsIndeterminate="{Binding !IsComplete}" Width="60" Height="6" CornerRadius="3" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="{DynamicResource AccentColor}" Background="{DynamicResource AppBorder}" IsVisible="{Binding !IsComplete}"/>
+
+                                    <PathIcon Grid.Column="1" Data="{StaticResource CheckIcon}" Foreground="{DynamicResource SuccessColor}" Width="16" Height="16" VerticalAlignment="Center" Margin="15,0,0,0" IsVisible="{Binding IsComplete}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Button Grid.Row="2" Content="取消" Classes="Secondary" Click="Cancel_Click" HorizontalAlignment="Center" Margin="0,16,0,0" Padding="28,8"/>
+        </Grid>
+    </Border>
+</Window>
+
